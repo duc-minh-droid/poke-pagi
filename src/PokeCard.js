@@ -18,7 +18,7 @@ function PokeCard({ URL, name }) {
 
     return (
         <>
-            {poke && <div className='flex w-full justify-around py-6 bg-slate-50 rounded-xl hover:shadow-2xl'>
+            {poke && <div className='flex w-full justify-around py-6 bg-slate-50 rounded-xl hover:shadow-2xl transition-shadow'>
                 <img alt='' src={poke.image} className="bg-slate-200 p-2 rounded-xl"/>
                 <div>
                     <div className='text-2xl'>{name}</div>
