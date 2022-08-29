@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import PokeCard from "./PokeCard";
+import UsePokes from "./UsePoke";
 
 function App() {
+  const {fetchMore, pokes, loading, last } = UsePokes()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <p className="text-center text-6xl mt-10">Bai tap Checkpoint</p>
+      <div className="App w-full flex flex-col gap-10 mt-16 px-36">
+        {pokes && pokes.map((e, id) => {
+          if (pokes.length == id + 1) {
+            return <div key={id} ref={last} className='w-full'>
+              <PokeCard name={e.name} URL={e.url} key={id} />
+            </div>
+          } else {
+            return <div key={id} className='w-full'>
+              <PokeCard name={e.name} URL={e.url} key={id} />
+            </div>
+          }
+        })}
+        {loading && "...Loading"}
+      </div>
+    </>
   );
 }
 
