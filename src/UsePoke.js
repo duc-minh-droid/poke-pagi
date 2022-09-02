@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function UsePokes() {
+function UsePokes(search) {
     const [pokes, setPokes] = useState([])
     const [offset, setOffset] = useState(0)
     const [loading, setLoading] = useState(true)
@@ -16,38 +16,46 @@ function UsePokes() {
                 setPokes(res.data.results)
                 setHasMore(res.data.results.length > 0)
             })
+        setOffset(16)
     }
 
     const fetchMore = async () => {
         setOffset(prev => prev + 8)
         setLimit(8)
         setLoading(false)
+    }
+
+    useEffect(() => {
         axios.get(URL)
             .then(res => {
-                setPokes(prev => [...prev, ...res.data.results])
+                setPokes(prev => [...new Set([...prev, ...res.data.results])])
                 setHasMore(res.data.results.length > 0)
             })
-    }
+        console.log(offset)
+    }, [offset])
 
     useEffect(() => {
         firstFetch()
         setLoading(false)
-        setOffset(16)
         setLimit(8)
     }, [])
 
+    useEffect(() => {
+        setPokes([])
+    }, [])
+
     const observer = useRef()
-    const last = useCallback(node=>{
+    const last = useCallback(node => {
         if (observer.current) observer.current.disconnect()
-        observer.current = new IntersectionObserver(entries=>{
-        if (entries[0].isIntersecting && hasMore) {
-            fetchMore()
-        }
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                fetchMore()
+            }
         })
         if (node) observer.current.observe(node)
-    }, [ pokes])
+    }, [loading, hasMore])
 
-    return {fetchMore, pokes, loading, last}
+    return { fetchMore, pokes, loading, last }
 }
 
 export default UsePokes

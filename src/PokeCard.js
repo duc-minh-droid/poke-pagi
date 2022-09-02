@@ -27,7 +27,7 @@ function PokeCard({ URL, name }) {
                     <p>Moves: {poke.moves.length}</p>
                 </div>
                 <div>
-                    {poke.stats.map(e => ({ name: e.stat.name, stat: e.base_stat })).map(e => <p>{e.name.charAt(0).toUpperCase() + e.name.slice(1)}: {e.stat}</p>)}
+                    {poke.stats.map((e,id) => ({ name: e.stat.name, stat: e.base_stat })).map((e,id) => <p key={id}>{e.name.charAt(0).toUpperCase() + e.name.slice(1)}: {e.stat}</p>)}
                 </div>
             </div>}
         </>)
